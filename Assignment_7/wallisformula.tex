@@ -1,0 +1,1021 @@
+%%% -*-LaTeX-*-
+%%% wallisformula.tex.1
+%%% Prettyprinted by texpretty lex version 0.02 [21-May-2001]
+%%% on Thu Nov  2 05:32:09 2017
+%%% for Steve Dunbar (sdunbar@family-desktop)
+
+\documentclass[12pt]{article}
+
+\input{../../../../etc/macros}
+\input{../../../../etc/mzlatex_macros}
+%% \input{../../../../etc/pdf_macros}
+
+\bibliographystyle{plain}
+
+\begin{document}
+
+\myheader \mytitle
+
+\hr
+
+\sectiontitle{Wallis' Formula}
+
+\hr
+
+\usefirefox
+
+\hr
+
+\visual{Rating}{../../../../CommonInformation/Lessons/rating.png}
+\section*{Rating} %one of
+% Everyone: contains no mathematics.
+%Student:  contains scenes of mild algebra or calculus that may require
+%guidance.
+Mathematically Mature:  may contain mathematics beyond calculus with
+proofs. % Mathematicians Only: prolonged scenes of intense rigor.
+
+\hr
+
+\visual{Section Starter Question}{../../../../CommonInformation/Lessons/question_mark.png}
+\section*{Section Starter Question} Can you think of a sequence or a
+process that approximates \( \PI \)?  What is the intuition or reasoning
+behind that sequence?
+
+\hr
+
+\visual{Key Concepts}{../../../../CommonInformation/Lessons/keyconcepts.png}
+\section*{Key Concepts}
+
+\begin{enumerate}
+    \item
+        \defn{Wallis' Formula} is the amazing limit
+        \[
+            \lim_{n \to \infty} \left( \frac{ 2 \cdot 2 \cdot 4 \cdot 4
+            \cdot 6 \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3
+            \cdot 5 \cdot 5 \dots (2n-1) \cdot (2n-1)\cdot(2n+1)} \right)
+            = \frac{\PI}{2}.
+        \]
+    \item
+        One proof of Wallis' formula uses a recursion formula developed
+        from integration of trigonometric functions.
+    \item
+        Another proof uses only basic algebra, the Pythagorean Theorem,
+        and the formula \( \PI r^2 \) for the area of a circle of radius
+        \( r \).
+    \item
+        Yet another proof uses Euler's infinite product representation
+        for the sine function.
+\end{enumerate}
+
+\hr
+
+\visual{Vocabulary}{../../../../CommonInformation/Lessons/vocabulary.png}
+\section*{Vocabulary}
+\begin{enumerate}
+    \item
+        \defn{Wallis' Formula} is the amazing limit
+        \[
+            \lim_{n \to \infty} \left( \frac{ 2 \cdot 2 \cdot 4 \cdot 4
+            \cdot 6 \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3
+            \cdot 5 \cdot 5 \dots (2n-1) \cdot (2n-1)\cdot(2n+1)} \right)
+            = \frac{\PI}{2}.
+        \]
+\end{enumerate}
+
+\hr
+
+\visual{Mathematical Ideas}{../../../../CommonInformation/Lessons/mathematicalideas.png}
+\section*{Mathematical Ideas}
+\subsection*{Introduction} \defn{Wallis' Formula} is the amazing limit
+\begin{equation}
+    \lim_{n \to \infty} \left( \frac{2 \cdot 2 \cdot 4 \cdot 4 \cdot 6
+    \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5 \cdot 5
+    \dots (2n-1) \cdot (2n-1)\cdot(2n+1)} \right) = \frac{\PI}{2}.%
+    \label{eq:wallisformula:wallis}
+\end{equation}
+%
+\index{Wallis Formula}
+Another way to write this is
+\[
+    \frac{\PI}{2} = \prod_{j=1}^{\infty} \frac{(2j)^2}{(2j-1)(2j+1)}.
+\] A ``closed form'' expression for the product in Wallis formula is
+\[
+    \lim_{n \to \infty} \frac{ 2^{4n} \cdot (n!)^4}{((2n)!)^2(2n+1)} =
+    \frac{\PI}{2}
+\] or equivalently
+\[
+    \lim_{n \to \infty} \frac{ 2^{4n}}{{\binom{2n}{n}}^2 (2n+1)} = \frac
+    {\PI}{2}.
+\]
+
+Note that Wallis Formula is equivalent to saying that the ``central
+binomial term'' has the asymptotic expression
+\[
+    \frac{1}{2^{2n}} \binom{2n}{n} \asympt \sqrt{ \frac{2}{(2n+1)\PI} }.
+\] See the subsection Central Binomial below for a proof of an
+equivalent inequality.
+
+In the form
+\begin{equation}
+    \label{eq:wallisformula:centralbinomexpansion} w_n = \prod_{j=1}^{n}
+    \frac{(2j)^2}{(2j-1)(2j+1)} = \frac{2^{4n}}{%
+    {\binom{2n}{n}}^2(2n+1)}
+\end{equation}
+it is easy to see that the sequence \( w_n \) is increasing since \( 4n^2/
+(4n^2-1) > 1 \).  Figure~%
+\ref{fig:wallisformula:wallis_plot} illustrates the increasing sequence.
+
+\begin{figure}
+    \centering
+    \begin{asy}
+settings.outformat = "pdf";
+
+import graph;
+
+size(5inches, IgnoreAspect);
+
+real myfontsize = 10;
+real mylineskip = 1.2*myfontsize;
+pen mypen = fontsize(myfontsize, mylineskip);
+defaultpen(mypen);
+
+real halfpi = 2*atan(1);
+
+real w(int n) {
+real w1 = 1;
+for (int j=1; j<n; ++j) {w1 = w1*(2*j)^2/((2*j-1)*(2*j+1)); }
+return w1;
+}
+
+xaxis("$n$", xmin=0, xmax=20, RightTicks(20), arrow=Arrow());
+yaxis("$w_n$", ymin=0, ymax=2, LeftTicks(4), arrow=Arrow());
+
+yequals(Label("$\pi/2$", (0,halfpi), 3W), halfpi, xmin=0, xmax=20, blue);
+
+for (int i=1; i<21; ++i)
+dot((i,w(i)), red);
+    \end{asy}
+    \caption{Convergence of the Wallis formula to $ \PI/2 $.  %
+    \label{fig:wallisformula:wallis_plot}}
+\end{figure}
+
+Doing a numerical linear regression of \( \log (\PI/2 - w_n) \) versus \(
+\log n \) on the domain \( n = 1 \) to \( n = 30 \) indicates that \( w_n
+\) approaches \( \PI/2 \) at a rate which is \( O(1/n) \).
+
+\subsection*{A proof using integration and recursion}
+
+\begin{theorem}[Wallis' Formula]
+    \begin{equation}
+        \lim_{n \to \infty} \left( \frac{2 \cdot 2 \cdot 4 \cdot 4 \cdot
+        6 \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5 \cdot
+        5 \dots (2n-1)\cdot(2n+1)} \right) = \frac{\PI}{2}.
+    \end{equation}
+\end{theorem}
+\index{Wallis Formula}
+
+\begin{proof}
+    Consider \( J_n = \int_0^{\PI/2} \cos^n(x) \, \df{x} \).
+    Integrating by parts with \( u = \cos^{n-1}(x) \) and \( \df{v} =
+    \cos(x) \) shows
+    \begin{align*}
+        \int_0^{\PI/2} \cos^n(x) \, \df{x} &= (n-1) \int_0^{\PI/2} \cos^
+        {n-2}(x) \sin^2(x) \, \df{x} \\
+        &= (n-1) \int_0^{\PI/2} \cos^{n-2}(x)(1 - \cos^2(x)) \, \df{x}
+        \\
+        &= (n-1) \int_0^{\PI/2} \cos^{n-2}(x) \, \df{x} - (n-1) \int_0^{\PI/2}
+        \cos^n(x) \, \df{x}.
+    \end{align*}
+    Gathering terms, we get \( n J_n = (n-1) J_{n-2} \).
+
+    Now \( J_1 = 1 \) so recursively \( J_3 = \frac{2}{3} \), \( J_5 =
+    \frac{2 \cdot 4}{3 \cdot 5} \) and inductively
+    \begin{equation}
+        \label{eq:wallisformula:oddproduct} J_{2n+1} = \frac{2 \cdot 4
+        \cdots (2n-2) \cdot (2n) }{1 \cdot 3 \cdots (2n-1) \cdot (2n+1)}.
+    \end{equation}
+    Likewise \( J_2 = \frac{\PI}{2\cdot2} \), and \( J_4 = \frac{3 \cdot
+    \PI}{ 2 \cdot 4 \cdot 2} \), \( J_6 = \frac{3 \cdot 5 \cdot \PI}{2
+    \cdot 4 \cdot 6 \cdot 2} \) and inductively
+    \[
+        J_{2n} = \frac{3 \cdot 5 \cdots (2n-3) \cdot (2n-1) \cdot \PI}{2
+        \cdot 4 \cdots (2n-2) \cdot (2n) \cdot 2}.
+    \]
+
+    For \( 0 \le x \le \PI/2 \), \( 0 \le \cos(x) \le 1 \), so \( \cos^{2n}
+    (x) \ge \cos^{2n+1}(x) \ge \cos^{2n+2}(x) \), implying in turn that \(
+    J_{2n} \ge J_{2n+1} \ge J_{2n+2} \).  Then
+    \[
+        1 \ge \frac{J_{2n+1}}{J_{2n}} \ge \frac{J_{2n+2}}{J_{2n}} =
+        \frac{2n+1}{2n+2}.
+    \] Hence \( \lim_{n \to \infty} \frac{J_{2n+1}}{J_{2n}} = 1 \).
+
+    That is,
+    \[
+        \lim_{n \to \infty} \left( \frac{ 2 \cdot 2 \cdot 4 \cdot 4
+        \cdot 6 \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5
+        \cdot 5 \dots (2n-1)\cdot(2n+1)} \frac{2}{\PI} \right) = 1
+    \] or equivalently
+    \[
+        \lim_{n \to \infty} \left( \frac{ 2 \cdot 2 \cdot 4 \cdot 4
+        \cdot 6 \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5
+        \cdot 5 \dots (2n-1)\cdot(2n+1)} \right) = \frac{\PI}{2}.
+    \]
+\end{proof}
+
+\subsection*{An elementary proof of Wallis formula}
+
+The following proof is adapted and expanded from~%
+\cite{wastlund07}.  The proof uses only basic algebra, the Pythagorean
+Theorem, and the formula \( \PI r^2 \) for the area of a circle of
+radius \( r \).  Another important property used implicitly is the
+completeness property of the reals.
+
+Define a sequence of numbers by \( s_1 = 1 \) and for \( n \ge 2 \),
+\begin{equation}
+    \label{eq:wallisformula:defnsn} s_n = \frac{3}{2} \cdot \frac{5}{4}
+    \cdots \frac{2n-1}{2n-2}.
+\end{equation}
+These are the reciprocals of the subsequence \( J_{2n-1} \) defined in
+equation \eqref{eq:wallisformula:oddproduct}.
+
+The partial products of Wallis' formula \eqref{eq:wallisformula:wallis}
+with an odd number of terms in the numerator are
+\begin{equation}
+    \label{eq:wallisformula:defnodds} o_n = \frac{2^2 \cdot 4^2 \cdots (2n-2)^2
+    \cdot 2n}{1 \cdot 3^2 \cdots (2n-1)^2} = \frac{2n}{s_n^2},
+\end{equation}
+while those with an even number of factors in the numerator are of the
+form
+\begin{equation}
+    \label{eq:wallisformula:defnevens} e_n = \frac{2^2 \cdot 4^2 \cdots
+    (2n-2)^2}{1 \cdot 3^2 \cdots (2n-3)^2 \cdot (2n-1)} = \frac{2n-1}{s_n^2}.
+\end{equation}
+Interpret \( e_1 = 1 \) as an empty product.  Since \( \frac{(2n)^2}{(2n-1)
+(2n+1)} > 1 \), clearly \( e_n < e_{n+1} \).  Since \( \frac{(2n)(2n+2)}
+{(2n+1)^2} < 1 \), clearly \( o_n > o_{n+1} \).  Also, \( e_n < o_n \).
+Therefore
+\[
+    e_1 < e_2 < e_3 < \cdots e_n < o_n < \cdots < o_3 < o_2 < o_1
+\] for any \( n \).  Furthermore, for \( 1 \le i \le n \),
+\[
+    \frac{2i}{s_i^2} = o_i \ge o_n
+\] and
+\[
+    \frac{2i-1}{s_i^2} = e_i \le e_n
+\] from which it follows that
+\begin{equation}
+    \label{eq:wallisformula:oddeveninequality} \frac{2i-1}{e_n} \le s_i^2
+    \le \frac{2i}{o_n}.
+\end{equation}
+For convenience, define \( s_0 = 0 \) so that inequality \eqref{eq:wallisformula:oddeveninequality}
+holds also for \( i = 0 \). Denote the successive difference \( a_n = s_
+{n+1} - s_n \) so \( a_0 = s_1 - s_0 = 1 \) and for \( n \ge 1 \)
+\[
+    a_n = s_{n+1} - s_n = s_n\left( \frac{2n+1}{2n} - 1 \right) = \frac{s_n}
+    {2n} = \frac{1}{2} \cdot \frac{3}{4} \cdots \frac{2n-1}{2n}.
+\]
+
+\begin{lemma}
+    For the sequence \( a_i \) we have the identity
+    \begin{equation}
+        \label{eq:wallisformula:identity} a_i a_j = \frac{j+1}{i+j+1} a_i
+        a_{j+1} + \frac{i+1}{i+j+1} a_{i+1} a_{j}
+    \end{equation}
+    for any \( i \) and \( j \).
+\end{lemma}
+
+\begin{proof}
+    Make the substitutions
+    \[
+        a_{i+1} = \frac{2i +1}{2(i+1)} a_i
+    \] and
+    \[
+        a_{j+1} = \frac{2j +1}{2(j+1)} a_j
+    \] the right side of the proposed identity \eqref{eq:wallisformula:identity}
+    becomes
+    \[
+        a_i a_j \left( \frac{2j+1}{2(j+1)} \cdot \frac{j+1}{i+j+1} +
+        \frac{2i+1}{2(i+1)} \cdot \frac{i+1}{i+j+1}\right) = a_i a_j.
+    \]
+\end{proof}
+
+\begin{lemma}
+    \begin{align*}
+        1 = a_0^2 &= a_0 a_1 + a_1 a_0 \\
+        &= a_0 a_2 + a_1^2 + a_2 a_0 \\
+        & \ldots \\
+        &= a_0 a_n + a_1 a_{n-1} + \cdots + a_n a_0
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    Start from \( a_0^2 = 1 \) and repeatedly apply the identity \eqref{eq:wallisformula:identity}.
+    At stage \( n \) applying the identity \eqref{eq:wallisformula:identity}
+    to every term the sum
+    \[
+        a_0 a_n + a_1 a_{n-1} + \cdots + a_n a_0
+    \] becomes
+    \[
+        \left( a_0 a_n + \frac{1}{n}a_1 a_{n-1}\right) + \left( \frac{n-1}
+        {n} a_1 a_{n-1} + \frac{2}{n} a_2 a_{n-2}\right) + \cdots +
+        \left( \frac{1}{n} a_{n-1} a_{1} + a_n a_{0} \right).
+    \] Collecting terms, this simplifies to \( a_0 a_n + a_1 a_{n-1} +
+    \cdots + a_n a_0 \).
+\end{proof}
+
+Now divide the positive quadrant of the \( xy \)-plane into rectangles
+by drawing the vertical lines \( y = s_n \) and the horizontal lines \(
+y = s_n \) for all \( n \).  Let \( R_{i,j} \) be the rectangle with
+lower left corner \( ( s_i, s_j) \) and upper right corner \( (s_{i+1},
+s_{j+1}) \).  The area of \( R_{i,j} \) is \( a_i a_j \).  Thus the
+identity \( 1 = a_0 a_n + a_1 a_{n_1} + \cdots + a_n a_0 \) states that
+the total area of the rectangles \( R_{i,j} \) for which \( i + j = n \)
+is \( 1 \).  Let \( P_n \) be the polygonal region consisting of all
+rectangles \( R_{i,j} \) for which \( i +j < n \).  Hence the area of \(
+P_n \) is \( n \).
+
+The outer corners of \( P_n \) are the points \( (s_i, s_j) \) for which
+\( i + j = n+1 \) and \( 1 \le i,j, \le n \).  By the Pythagorean
+theorem, the distance of such a point to the origin is \( \sqrt{s_i^2 +
+s_j^2} \).  By \eqref{eq:wallisformula:oddeveninequality}
+\[
+    \sqrt{ \frac{2(i+j)}{o_n} } = \sqrt{ \frac{2(n+1)}{o_n} }.
+\] bounds this distance from above.  Similarly the inner corners of \( P_n
+\) are the points \( ( s_i,s_j) \) for which \( i + j = n \) and \( 0
+\le i,j \le n \).  The distance of such a point to the origin is bounded
+from below by
+\[
+    \sqrt{ \frac{2(i+j-1)}{e_n} } = \sqrt{ \frac{2(n-1)}{e_n} }.
+\] Therefore, \( P_n \) contains a quarter circle of radius \( \sqrt{2(n-1)/e_n}
+\) and is contained in a quarter circle of radius \( \sqrt{2(n+1)/o_n} \).
+See Figure~%
+\ref{fig:wallisformula:proofdiagram} for a diagram of the polygonal
+region \( P_n \) and the corresponding inner and outer quarter circles
+for \( n = 4 \).
+
+\begin{figure}
+    \centering
+    \begin{asy}
+import graph;
+
+size(5inches);
+
+real myfontsize = 10;
+real mylineskip = 1.2*myfontsize;
+pen mypen = fontsize(myfontsize, mylineskip);
+defaultpen(mypen);
+
+xaxis("$x$", xmin=0, xmax=3, arrow=Arrow());
+yaxis("$y$", ymin=0, ymax=3, arrow=Arrow());
+
+real s1 = 1;
+real s2 = 3/2;
+real s3 = 15/8;
+real s4 = 105/48;
+
+xequals(Label("$s_1$",(0,s1)), s1, ymax=3, dotted);
+yequals(Label("$s_1$",(0,s1)), s1, xmax=3, dotted);
+xequals(Label("$s_2$",(0,s2)), s2, ymax=3, dotted);
+yequals(Label("$s_2$",(0,s2)), s2, xmax=3, dotted);
+xequals(Label("$s_3$",(0,s3)), s3, ymax=3, dotted);
+yequals(Label("$s_3$",(0,s3)), s3, xmax=3, dotted);
+xequals(Label("$s_4$",(0,s4)), s4, ymax=3, dotted);
+yequals(Label("$s_4$",(0,s4)), s4, xmax=3, dotted);
+
+draw( (0,s4)--(s1,s4)--(s1,s3)--(s2,s3)-- \
+(s2,s2)--(s3,s2)--(s3,s1)--(s4,s1)--(s4,0) );
+
+real Router = sqrt( (2*(4+1))/( (2^2*4^2*6^2*8)/(1*3^2*5^2*7^2) ) );
+label("$r=\sqrt{2(4+1)/o_4}$", (Router,0),SE);
+real Rinner = sqrt( (2*(4-1))/( (2^2*4^2*6^2)/(1*3^2*5^2*7) ) );
+label("$r=\sqrt{2(4-1)/e_4}$", (Rinner,0),S);
+
+draw( arc( (0,0), Rinner, 0, 90));
+draw( arc( (0,0), Router, 0, 90));
+
+label("$R_{0,0}$", (s1/2, s1/2));
+label("$R_{0,1}$", (s1/2, (s1+s2)/2));
+label("$R_{0,2}$", (s1/2, (s2+s3)/2));
+label("$R_{0,3}$", (s1/2, (s3+s4)/2));
+
+label("$R_{1,0}$", ((s1+s2)/2, s1/2));
+label("$R_{1,1}$", ((s1+s2)/2, (s1+s2)/2));
+label("$R_{1,2}$", ((s1+s2)/2, (s2+s3)/2));
+
+label("$R_{2,0}$", ((s2+s3)/2, s1/2));
+label("$R_{2,1}$", ((s2+s3)/2, (s1+s2)/2));
+
+label("$R_{3,0}$", ((s3+s4)/2, s1/2));
+
+
+    \end{asy}
+    \caption{A diagram of the regions $ R_{i,j} $ and the inner and
+    outer quarter circles for the case $ n=4 $.  %
+    \label{fig:wallisformula:proofdiagram}}
+\end{figure}
+
+The area of a quarter circle of radius \( r \) is \( \PI r^2 \) and the
+area of \( P_n \) is \( n \).  This leads to the bounds
+\begin{equation}
+    \frac{(n-1)\PI}{2e_n} < n < \frac{(n+1)\PI}{2o_n}%
+    \label{eq:wallisformula:circlebounds}
+\end{equation}
+from which it follows that
+\[
+    \frac{(n-1)\PI}{2n} < e_n < o_n < \frac{(n+1)\PI}{2n}.
+\] Then as \( n \to \infty \), \( e_n \) and \( o_n \) both approach \(
+\PI/2 \).
+
+\subsection*{Wallis' Formula and the Central Binomial Coefficient}
+
+This subsection gives a detailed proof that Wallis' Formula gives an
+explicit inequality bound on the central binomial term that in turn
+implies the asymptotic formula for the central binomial coefficient. The
+derivation in
+\cite{hirschhorn15}.%
+\index{central binomial coefficient}
+motivates this proof.
+
+Start from the expansion \eqref{eq:wallisformula:centralbinomexpansion}
+for the Central Binomial Coefficient:
+\[
+    w_n = \prod_{j=1}^{n} \frac{(2j)^2}{(2j-1)(2j+1)} = \frac{ 2^{4n}}{%
+    {\binom{2n}{n}}^2(2n+1)}.
+\] Rearrange it to
+\[
+    {\binom{2n}{n}}^2 = \frac{16^n}{2n+1} \prod_{j=1}^{n} \frac{(2j-1)(2j+1)}
+    {(2j)^2}
+\] and use the definitions \eqref{eq:wallisformula:defnodds} and \eqref{eq:wallisformula:defnevens}
+of the partial products of the Wallis formula to obtain
+\[
+    {\binom{2n}{n}}^2 = \frac{16^n}{(2n+1)} \frac{2n+2}{(2n+1)o_{n+1}}
+\] and
+\[
+    {\binom{2n}{n}}^2 = \frac{16^n}{(2n+1)} \frac{1}{e_{n+1}}.
+\] Rearrange the inequality \eqref{eq:wallisformula:circlebounds} to
+obtain
+\[
+    \frac{2n+2}{\PI(n+2)} < \frac{1}{o_{n+1}} \text{ and } \frac{1}{e_{n+1}}
+    < \frac{2n+2}{n\PI}.
+\] Then
+\[
+    \frac{16^n}{(2n+1)} \frac{(2n+2)^2}{(2n+1)(n+2)\PI} < {\binom{2n}{n}}^2
+    < \frac{16^n}{(2n+1)} \frac{(2n+2)}{n\PI}
+\] and taking square roots and slightly rearranging again
+\[
+    \frac{4^n}{\sqrt{(2n+1)(\PI/2)}} \sqrt{ \frac{2(n+1)^2}{(2n+1)(n+2)}}
+    < {\binom{2n}{n}} < \frac{4^n}{\sqrt{(2n+1)(\PI/2)}} \sqrt{\frac{(n+1)}
+    {n}}.
+\] To simplify, take a series expansion of the square roots of the
+rational expressions and truncate, leaving
+\[
+    \frac{4^n}{\sqrt{(2n+1)(\PI/2)}}\left(1-\frac{1}{2n} \right) < {\binom
+    {2n}{n}} < \frac{4^n}{\sqrt{(2n+1)(\PI/2)}} \left(1 + \frac{1}{2n}
+    \right).
+\]
+
+\subsection*{A proof using the product expansion of the sine function}
+
+\begin{theorem}
+    The expansion of \( \sin(z) \) as an infinite product is
+    \[
+        \sin( z ) = z \prod_{m=1}^{\infty} \left( 1 - \frac{z^2}{m^2 \PI^2}
+        \right).
+    \]
+\end{theorem}
+\index{sine product expansion}
+
+\begin{proof}
+    See
+    \cite[page 312]{saks71} for the proof.  The article in the
+    Mathworld.com article on \link{Sine}{http://mathworld.wolfram.com/Sine.html}
+    also gives references to Edwards 2001, pages 18 and 47; and Borwein
+    et al.  2004, page 5.
+\end{proof}
+
+Although the common proof uses complex analysis, as in the texts cited
+above, a proof using only elementary analysis is possible.  The
+following proof is adapted from
+\cite{kortram96}.
+
+\begin{proof}
+    Start with the definition of the Chebyshev polynomials \( T_n(x) \)
+    from the trigonometric identity \( \cos(nx) = T_n( \cos(x) ) \).
+    Then
+    \[
+        \cos( 2kx ) = T_k(\cos(2x)) = T_k(1 - 2 \sin^2 x).
+    \] Together with the sine product identity
+    \[
+        \sin( (2k+1)x) - \sin( (2k-1)x) = 2 \sin(x) \cdot \cos(2kx)
+    \] this inductively shows that there is a polynomial \( F_m \) of
+    degree \( m \) such that
+    \[
+        \sin( (2m+1)x ) = \sin(x) \cdot F_m(\sin^2(x)).
+    \] (In fact, using the definition \( U_n(\cos(x)) = \frac{\sin((n+1)x)}
+    {\sin(x)} \) for the Chebyshev polynomials of the second kind, it is
+    easy to show that \( F_m(x) = U_{2n}(\sqrt{1-x}) \).) Substituting \(
+    x_k = \frac{k\PI}{2m+1} \) and noting that \( \sin((2m+1)x_k) = 0 \)
+    shows that \( F_m \) has zeros at \( \sin^2\left((\frac{k\PI}{2m+1}
+    \right) \) for \( k = 1,2,\dots,m \).  These zeros are distinct, so \(
+    F_m \) has no other zeros, then
+    \[
+        F_m(y) = F_m(0) \prod_{k=1}^{m} \left( 1 - \frac{y}{\sin^2\left(\frac
+        {k\PI}{2m+1}\right)} \right)
+    \] and
+    \[
+        F_m(0) = \lim_{x \to 0 } \frac{\sin( (2m+1)x)}{\sin(x)} = 2m+1.
+    \] Therefore
+    \[
+        \sin( (2m+1)x) = (2m+1) \sin(x) \prod_{k=1}^{m} \left( 1 - \frac
+        {\sin^2 (x)}{\sin^2\left(\frac{k\PI}{2m+1}\right)} \right)
+    \] and changing variables
+    \begin{equation}
+        \label{eq:wallisformula:sineprod} \sin(x) = (2m+1) \sin\left(
+        \frac{x}{2m+1} \right) \prod_{k=1}^{m} \left( 1 - \frac{\sin^2\left
+        (\frac{x}{2m+1}\right)}{\sin^2\left( \frac{k\PI}{2m+1}\right)}
+        \right).
+    \end{equation}
+
+    The goal now is to estimate the product terms.  For all real \( t \),
+    \( \EulerE^t \ge 1 + t \) and therefore \( \EulerE^{-t} \le \frac{1}
+    {1 + t} \).  For \( u < 1 \), the choice \( t = u/(1-u) \) gives \(
+    \EulerE^{-u/(1-u)} \le 1 - u \).  Then for every collection of
+    numbers \( u_k \in [0,1) \), we have
+    \begin{equation}
+        \label{eq:wallisformula:expineqone} 1 - \sum_{k} \frac{u_k}{1-u_k}
+        \le \EulerE^{-\sum_{k} \frac{u_k}{1-u_k}} \le \prod_{k} (1 - u_k)
+        \le \EulerE^{-\sum_{k} u_k} \le 1.
+    \end{equation}
+    If also \( \sum_k u_k < 1 \), then we also know that
+    \begin{equation}
+        \label{eq:wallisformula:expineqtwo} \EulerE^{-\sum_{k} u_k} \le
+        \frac{1}{1 + \sum_{k} u_k}
+    \end{equation}
+    and subtracting the first and third terms of \eqref{eq:wallisformula:expineqone}
+    from \( 1 \) and using \eqref{eq:wallisformula:expineqtwo}
+    \begin{equation}
+        \label{eq:wallisfunction:sumprodineq} \frac{\sum_{k} u_k}{1 +
+        \sum_{k} u_k} \le 1 - \prod_{k} (1 - u_k) \le \sum_{k} \frac{u_k}
+        {1-u_k}.
+    \end{equation}
+
+    Let \( m \) and \( N \) be positive integers with \( m > N \).  Take
+    \( x \) such that \( |x| < \frac{1}{4} N \PI \) and \( \frac{x}{\PI}
+    \notin \Integers \).  Then define \( u_k \) by
+    \[
+        u_k = \left( \frac{\sin\left( \frac{x}{2m+1} \right)}{\sin\left(
+        \frac{k\PI}{2m+1} \right)} \right)^2, \qquad k = 1,2,\dots,m.
+    \] Use \eqref{eq:wallisformula:sineprod} by dividing the leading
+    factor and the first \( N \) factors onto the left side to obtain
+    \[
+        \frac{\sin(x)}{(2m+1) \sin\left( \frac{x}{2m+1} \right) \prod_{k=1}^
+        {N}(1-u_k)} = \prod_{k=N+1}^{m} (1-u_k).
+    \] Then use the first, third and fifth terms of \eqref{eq:wallisformula:expineqone}
+    to see that
+    \begin{equation}
+        \label{eq:wallisformula:ineqfour} 1 - \sum_{k=N+1}^{m} \frac{u_k}
+        {1-u_k} \le \frac{\sin(x)}{(2m+1) \sin\left( \frac{x}{2m+1}
+        \right) \prod_{k=1}^{N}(1-u_k)} \le 1.
+    \end{equation}
+    For \( 0 \le t \le \frac{\PI}{2} \) we have \( \sin(t) \ge \frac{2}{\PI}
+    t \), so we see that
+    \[
+        u_k \le \left( \frac{(2m+1)\sin\left( \frac{x}{2m+1} \right)}{2k}\right)^2
+        \le \left( \frac{x}{2k} \right)^2;
+    \] thus
+    \[
+        \frac{u_k}{1-u_k} \le \frac{x^2}{(2k)^2 - x^2} \qquad \text{for}
+        k > N.
+    \] Hence
+    \[
+        \sum_{k=N+1}^{m} \frac{u_k}{1-u_k} \le \frac{x^2}{2N-|x|}.
+    \] Thus it follows from \eqref{eq:wallisformula:ineqfour} that
+    \[
+        1 - \frac{x^2}{2N-|x|} \le \frac{\sin(x)}{(2m+1) \sin\left(
+        \frac {x}{2m+1} \right) \prod_{k=1}^{N}(1-u_k)} \le 1.
+    \] Let \( m \to \infty \) so that
+    \[
+        1 - \frac{x^2}{2N-|x|} \le \frac{\sin(x)}{x \prod_{k=1}^{N}(1-u_k)}
+        \le 1.
+    \] Now let \( N \to \infty \) and we obtain for \( \frac{x}{\PI}
+    \notin \Integers \)
+    \[
+        \sin x = x \prod_{k=1}^{\infty} \left( 1 - \frac{x^2}{k^2 \PI^2}
+        \right).
+    \] For \( \frac{x}{\PI} \in \Integers \) this equality is also true.
+\end{proof}
+
+The following somewhat probabilistic proof of Euler's infinite product
+formula is adapted from
+\cite{holst12}.
+\begin{proof}
+    Start with the integral
+    \[
+        \int_{0}^{n} x^{t-1}\left( 1 - \frac{x}{n} \right)^n \df{x}
+    \] and integrate by parts once:
+    \begin{align*}
+        u &= \left(1-\frac{x}{n}\right)^n & v &= \frac{1}{t} x^{t} \\
+        \df{u} &= -\left(1-\frac{x}{n}\right)^{n-1} \df{x} & \df{v} &= x^
+        {t-1} \df{x}.  \\
+    \end{align*}
+    Then
+    \begin{align*}
+        \int_{0}^{n} x^{t-1}\left( 1 - \frac{x}{n} \right)^n \df{x} &=
+        \left.  \left(1-\frac{x}{n}\right)^n \right|_{0}^{n} + \int_{0}^
+        {n} \frac{1}{t} x^{t} \left(1-\frac{x}{n}\right)^{n-1} \df{x} \\
+        &= \frac{1}{t} \int_{0}^{n} x^{t} \left(1-\frac{x}{n}\right)^{n-1}
+        \df{x}
+    \end{align*}
+    Integrate by parts again:
+    \begin{align*}
+        u &= \left(1-\frac{x}{n}\right)^{n-1} & v &= \frac{1}{t+1} x^{t+1}
+        \\
+        \df{u} &= -\frac{n-1}{n} \left(1-\frac{x}{n}\right)^{n-2} \df{x}
+        & \df{v} &= x^{t} \df{x} \\
+    \end{align*}
+    so
+    \[
+        \int_{0}^{n} x^{t-1}\left( 1 - \frac{x}{n} \right)^n \df{x} =
+        \frac{(n-1)}{t(t+1)n} \int_{0}^{n} x^{t+1} \left(1-\frac{x}{n}\right)^
+        {n-2} \df{x}.
+    \] After integration by parts \( n \) times:
+    \begin{align*}
+        \int_{0}^{n} x^{t-1}\left( 1 - \frac{x}{n} \right)^n \df{x} &=
+        \frac{(n-1)!}{t(t+1) \dots (t+n-1) n^{n-1}} \int_0^n x^{t+n-1}
+        \df{x} \\
+        &= \frac{(n-1)!}{t(t+1) \dots (t+n-1) n^{n-1}} \left.  \frac{x^{t+n}}
+        {t+n} \right|_0^n \\
+        &= \frac{n!  \, n^t}{t(t+1) \dots (t+n)}.
+    \end{align*}
+
+    Then by dominated convergence it follows that
+    \[
+        \Gamma(t) = \int_0^{\infty} x^{t-1} \EulerE^{-x} \df{x} = \lim_{n
+        \to \infty} \frac{ n!\,n^t }{t(t+1)\dots(t+n)}.
+    \] Note that limit definition of the Gamma function is also \link{http://dlmf.nist.gov/5.8
+    E1}{http://dlmf.nist.gov/5.8 E1}.  It follows that for \( -1 < t < 1
+    \) that
+    \[
+        \Gamma(1 + t) \Gamma(1-t) = \prod_{k=1}^{\infty} \frac{1}{1 - t^2/k^2}.
+    \]
+
+    For \( X \) and \( Y \) independent exponential random variables,
+    both with expectation \( 1 \) we have that
+    \[
+        \E{X^t} = \int_0^\infty x^t \EulerE^{-x} \df{x} = \Gamma(1 + t)
+    \] and likewise \( \E{Y^{-t}} = \Gamma(1-t) \).  Then using the
+    independence and symmetry
+    \[
+        \Gamma(1+t)\Gamma(1-t) = \E{X^t}\E{Y^{-t}} = \E{ (X/Y)^t } = \E{%
+        (X/Y)^{|t|} }
+    \]
+
+    The distribution function for the random variable \( X/Y \) is
+    \[
+        \Prob{ X/Y \le u } = \Prob{ Y \ge X/u } = \E{ \EulerE^{-X/u}} =
+        \frac{u}{u+1}
+    \] for \( u > 0 \).  Then the probability density is
+    \[
+        \deriv{}{u} \Prob{X/Y \le u} = \frac{1}{(1+u)^2}, \qquad u > 0.
+    \] This gives by integration by parts, for \( -1 < t < 1 \), that
+    \[
+        \E{(X/Y)^{|t|}} = \int_{0}^{\infty} \frac{u^{|t|}}{(u+1)^2} \df{u}
+        = \int_{0}^{\infty} \frac{ |t| u^{|t|-1}}{u+1} \df{u}
+    \]
+
+    The last integral is \( \PI t/\sin(\PI t) \).  For example, this is
+    formula 613, page 445 in the 18th Edition of the CRC Standard
+    Mathematical Tables.  It can also be done with contour integration
+    in the complex plane
+    \[
+        \int_{0}^{+\infty} \frac{ |t| u^{|t|-1}}{u+1} \df{u} - 2\PI \I (-1)^
+        {|t|-1} + \int_{+\infty}^0 \frac{ |t| u^{2\PI\I(|t|-1)}}{u+1}
+        \df{u} = 0
+    \] so
+    \[
+        \int_{0}^{\infty} \frac{ |t| u^{|t|-1}}{u+1} \df{u} \left( 1-
+        \EulerE^{2\PI \I |t|} \right) = -2 \PI \I \EulerE^{\PI \I |t|}.
+    \] Thus
+    \[
+        \int_{0}^{\infty} \frac{ |t| u^{|t|-1}}{u+1} \df{u} = \frac{|t|
+        2 \PI \I \EulerE^{\PI \I |t|}}{\EulerE^{2\PI \I |t|} - 1} =
+        \frac{ \PI |t| }{\sin ( \PI |t| )} = \frac{ \PI t}{\sin( \PI t)}.
+    \] Hence, for \( -1 < t < 1 \)
+    \[
+        \Gamma(1 + t) \Gamma(1 - t) = \E{ (X/Y)^t} = \frac{ \PI t}{\sin(
+        \PI t)}.
+    \] A standard integration-by-parts gives the fundamental Gamma
+    function recursion \( \Gamma(t) = \Gamma(1+t)/t \).  Using this to
+    define \( \Gamma(t) \) for \( t < 0 \), it follows that for all real
+    \( t \),
+    \[
+        \sin( \PI t ) = \frac{\PI}{\Gamma(t)\Gamma(1-t)}.
+    \] Combining all results above,
+    \[
+        \sin( \PI t ) = \PI t \prod_{k=1}^{\infty} \left( 1 - \frac{t^2}
+        {k^2} \right).
+    \]
+\end{proof}
+
+\begin{corollary}[Wallis' Formula]
+    \[
+        \lim_{n \to \infty} \frac{ 2 \cdot 2 \cdot 4 \cdot 4 \cdot 6
+        \cdot 6 \dots (2n) \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5 \cdot 5
+        \dots (2n-1) \cdot (2n-1)\cdot(2n+1)} = \frac{\PI}{2}.
+    \]
+\end{corollary}
+\index{Wallis's Formula}
+
+\begin{proof}
+    Substitute \( z = \PI/2 \) in the product expansion of \( \sin(z) \).
+\end{proof}
+
+\begin{remark}
+    In
+    \cite{ciaurri15} Ciaurri uses Tannery's Theorem for Infinite
+    Products, a trig identity for cotangent and tangent, and Wallis
+    formula to provide an elementary proof of product expansion of the
+    sine function.  In this sense, the product expansion of the sine
+    function is equivalent to Wallis' formula.
+\end{remark}
+
+\subsection*{A Geometric Interpretation of Wallis' Formula}
+
+This section gives a geometric interpretation of Wallis' formula,
+constructing a subset of the unit square with area \( \frac{8}{9} \cdot
+\frac{24}{25} \cdot \frac{48}{49} \cdots = \frac{2}{3} \cdot \frac{4}{3}
+\cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdot \frac{8}{7}
+\cdots = \frac{1}{2} \cdot \frac{\pi}{2} \).  The construction is
+reminiscent of the construction of the Sierpinski Triangle.
+
+Take a unit square \( W_0 \) and remove a square of area \( \frac{1}{3}
+\cdot \frac{1}{3} \) from the center.  Label the result as \( W_1 \)
+with area \( \frac{8}{9} \).  Next remove a square of area \( \frac{1}{5}
+\cdot \frac{1}{5} \) from the center of each of the \( 8 \) small
+sub-squares of area \( \frac{1}{9} \) constituting \( W_1 \) and call
+the result \( W_2 \) with area \( \frac{8}{9} \cdot \frac{24}{25} \).
+Continuing by removing squares of area \( \frac{1}{7} \cdot \frac{1}{7} \)
+from each sub-square of area \( \frac{1}{5} \cdot \frac{1}{5} \)
+surrounding the hole removed at stage \( 2 \), construct region \( W_3 \)
+with area \( \frac{8}{9} \cdot \frac{24}{25} \cdot \frac{48}{49} \).
+Continue to create \( W_4 \), and so on.  Call the limiting region \( W_
+{\infty} \) which has area \( \frac{8}{9} \cdot \frac{24}{25} \cdot
+\frac{48}{49} \cdots = \frac{1}{2} \cdot \frac{\pi}{2} \).
+
+%% The number of squares removed at stage $n$ is $2^{2(n-1)}n!/(n-1)!$.
+The side length of the removed squares at stage \( n \) is \( \frac{2^n
+n!}{(2n+1)!} \).  After \( 3 \) stages, \( 201 \) squares have been
+removed, and the stage \( 3 \) holes have side length \( \frac{1}{3}
+\cdot \frac{1}{5} \cdot \frac{1}{7} = \frac{1}{105} \).  It will be
+impractical to illustrate more than \( 3 \) stages of this iterative
+process.
+
+\begin{figure}[htbp]
+\begin{asy}
+size(5inches);
+
+real myfontsize = 12;
+real mylineskip = 1.2*myfontsize;
+pen mypen = fontsize(myfontsize, mylineskip);
+defaultpen(mypen);
+
+path us = unitsquare;
+int NStages = 3;
+
+real [] factor;
+transform [] scalefactor;
+transform [][] offset = new transform[4][];
+path [] stage;
+
+factor[0] = 1;
+
+for(int i=1; i <= NStages; ++i) {
+  factor[i] = factor[i-1] * (1/(2*i+1)); 
+  scalefactor[i] = scale(factor[i]);
+  for(int k=0; k<2*i+1; ++k) {
+    for(int j=0; j<2*i+1; ++j) {
+      offset[i][(2*i+1)*k + j] = shift(j*factor[i], k*factor[i]);
+    }
+  }
+}
+
+stage.push( us );
+stage.push( offset[1][(2*1+1)*1+1]*scalefactor[1]*us );
+filldraw(stage, lightgrey+evenodd, black);
+
+for(int k=0; k<2*1+1; ++k) {
+  for(int j=0; j<2*1+1; ++j) {
+    if ( j == 1 && k == 1) {
+      continue;
+    }
+    else {
+    stage.push( offset[2][(2*2+1)*2+2] * offset[1][(2*1+1)*k+j] * scalefactor[2]*us );
+    }
+  }
+}
+filldraw(shift(1.5, 0) * stage, lightgrey+evenodd, black);
+
+for(int k=0; k<2*1+1; ++k) {
+  for(int j=0; j<2*1+1; ++j) {
+    if ( j == 1 && k == 1) {
+      continue;
+    }
+    else {
+      for(int m=0; m<2*2+1; ++m) {
+	for(int n=0; n<2*2+1; ++n) {
+	  if ( m == 2 && n == 2) {
+	    continue;
+	  }
+	  else {
+	    stage.push( offset[3][(2*3+1)*3+3] *
+		  offset[2][(2*2+1)*m+n] *
+		  offset[1][(2*1+1)*k+j] * scalefactor[3]*us );
+	  }
+	}
+      }
+    }
+  }
+}
+filldraw(shift(3, 0) * stage, lightgrey+evenodd, black);
+\end{asy}
+
+    \caption[]{Three stages in the construction of the Wallis sieve.}
+\end{figure}
+
+Here area means the Lebesgue measure of the limiting region \( W_{\infty}
+\). However \( W_{\infty} \) does not contain any product set \( A
+\times B \) with \( A, B \subset \Reals \), each with positive Lebesgue
+measure.  To see this, consider a maximal product subset of \( W_1 \),
+for example \( [0,1] \times ([0,\frac{1}{3}] \union [\frac{2}{3}, 1]) \)
+(or equivalently \( ([0,\frac{1}{3}] \union [\frac{2}{3}, 1]) \times [0,1]
+\) although from here on, consider only the product sets with first
+factor \( [0,1] \)). This product subset has measure \( \frac{2}{3} \).
+A similar maximal product subset of \( W_2 \) has measure \( \frac{2}{3}
+\cdot \frac{4}{5} \).  Continuing, a maximal product subset of \( W_{\infty}
+\) has measure \( \frac{2}{3} \cdot \frac{4}{5} \cdot \frac{6}{7} \cdots
+= \prod\limits_{n=1}^{\infty} \left( 1- \frac{1}{2n+1}\right) = 0 \).
+
+Thus, \( W_{\infty} \) is an example of a subset of the plane \( \Reals^2
+\) with positive Lebesgue measure, but not admitting any product subset
+with positive Lebesgue measure.  Note also that \( W_{\infty} \) is a
+``square-like'' region with area equal to a circle with radius \( \frac{1}
+{2} \).  In that sense, this is a solution to the ancient problem of
+``squaring the circle''.
+
+\subsection*{Sources}
+
+This section is adapted from a sketch of the proof of Wallis' Formula in
+Kazarinoff
+\cite{kazarinoff61} and the short note by W\"{a}stlund
+\cite{wastlund07}.  The elementary proofs of the sine product are from
+\cite{kortram96} and
+\cite{holst12}. The geometric interpretation of Wallis' Formula is
+adapted from
+\cite{rummler}.
+
+\hr
+
+\visual{Problems to Work}{../../../../CommonInformation/Lessons/solveproblems.png}
+\section*{Problems to Work for Understanding}
+\begin{enumerate}
+    \item
+        Show that
+        \[
+            \frac{ 2^{4n} \cdot (n!)^4}{((2n)!)^2(2n+1)} = \frac{ 2
+            \cdot 2 \cdot 4 \cdot 4 \cdot 6 \cdot 6 \dots (2n) \cdot (2n)}
+            {1 \cdot 3 \cdot 3 \cdot 5 \cdot 5 \dots (2n-1)\cdot(2n+1)}.
+        \]%
+    \item
+        Numerically find the rate at which the sequence
+        \[
+            \frac{ 2 \cdot 2 \cdot 4 \cdot 4 \cdot 6 \cdot 6 \dots (2n)
+            \cdot (2n)}{1 \cdot 3 \cdot 3 \cdot 5 \cdot 5 \dots (2n-1)\cdot
+            (2n+1)}
+        \] approaches \( \PI/2 \) by calculating values and using
+        regression.
+    \item
+        Use induction to prove
+        \[
+            J_{2n+1} = \frac{(2n)\cdot (2n-2) \dots 4 \cdot 2}{(2n+1)
+            \cdot (2n-1) \dots 3 \cdot 1}
+        \] and
+        \[
+            J_{2n} = \frac{(2n-1)\cdot(2n-3) \dots 3 \cdot \PI}{(2n)\cdot
+            (2n-2)\dots 4 \cdot 2 \cdot 2}.
+        \]
+    \item
+        The simple proof of the sine product formula uses the polynomial
+        \( F_m \) of degree \( m \) such that
+        \[
+            \sin( (2m+1)x ) = \sin(x) \cdot F_m(\sin^2(x)).
+        \] Explicitly find \( F_0(x), F_1(x), F_2(x), F_3(x), F_4(x) \)
+        and plot them on \( [-1,1] \).
+        % Solution:  F_0(x) = 1, F_1(x) = 3 - 4x, F_2(x) = 16x^2 -
+        % 20x^2 + 5, F_3(x) = -64x^3 + 112 x^2 - 56 x + 7, F_4(x)
+        % 256x^4 - 576 x^3 + 432 x^2 -120 x + 9
+    \item
+        Give a detailed proof that
+        \[
+            \int_{0}^{n} x^{t-1}\left( 1 - \frac{x}{n} \right)^n \df{x}
+            = \frac{n!  \, n^t}{t(t+1) \dots (t+n)}.
+        \]
+    \item
+        Provide a careful and detailed proof that if \( X \) and \( Y \)
+        are independent exponential random variables, both with
+        expectation \( 1 \) we have that
+        \[
+            \E{ (X/Y)^t } = \E{(X/Y)^{|t|} }.
+        \]
+    \item
+        Provide a detailed proof using contour integration in the
+        complex plane to show that
+        \[
+            \int_{0}^{\infty} \frac{ |t| u^{|t|-1}}{u+1} \df{u} = \frac{|t|
+            2 \PI \I \EulerE^{ \PI \I\ |t|}}{\EulerE^{2\PI \I |t|} - 1}
+            = \frac{ \PI t}{\sin ( \PI t)}.
+        \]
+
+\end{enumerate}
+
+%% \link{ _soln.xml}{Solutions to Problems}
+
+\hr
+
+\visual{Books}{../../../../CommonInformation/Lessons/books.png}
+\section*{Reading Suggestion:}
+
+\bibliography{../../../../CommonInformation/bibliography}
+
+%   \begin{enumerate}
+%     \item
+%     \item
+%     \item
+%   \end{enumerate}
+
+\hr
+
+\visual{Links}{../../../../CommonInformation/Lessons/chainlink.png}
+\section*{Outside Readings and Links:}
+\begin{enumerate}
+    \item
+    \item
+    \item
+    \item
+\end{enumerate}
+
+\hr
+
+\mydisclaim \myfooter
+
+Last modified:  \flastmod
+
+\end{document}
+
+readability grades:
+        Kincaid: 10.5
+        ARI: 11.0
+        Coleman-Liau: 13.2
+        Flesch Index: 52.3
+        Fog Index: 13.5
+        Lix: 46.7 = school year 8
+        SMOG-Grading: 12.2
+sentence info:
+        8904 characters
+        1809 words, average length 4.92 characters = 1.60 syllables
+        98 sentences, average length 18.5 words
+        51% (50) short sentences (at most 13 words)
+        17% (17) long sentences (at least 28 words)
+        37 paragraphs, average length 2.6 sentences
+        2% (2) questions
+        44% (44) passive sentences
+        longest sent 81 wds at sent 45; shortest sent 1 wds at sent 22
+word usage:
+        verb types:
+        to be (56) auxiliary (3) 
+        types as % of total:
+        conjunctions 5% (87) pronouns 4% (80) prepositions 12% (212)
+        nominalizations 4% (72)
+sentence beginnings:
+        pronoun (7) interrogative pronoun (1) article (17)
+        subordinating conjunction (5) conjunction (1) preposition (8)
+
+File name                  : wallisformula.tex
+Number of characters       : 32927
+Number of words            : 3260
+Percent of complex words   : 14.97
+Average syllables per word : 1.6626
+Number of sentences        : 65
+Average words per sentence : 50.1538
+Number of text lines       : 698
+Number of blank lines      : 197
+Number of paragraphs       : 189
+
+
+READABILITY INDICES
+
+Fog                        : 26.0493
+Flesch                     : 15.2749
+Flesch-Kincaid             : 23.5884
+
+
